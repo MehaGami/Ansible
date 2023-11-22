@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="./style/reset.css" />
+    <link rel="stylesheet" href="./style/styles.css" />
+
+    <title>My resume</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Main content -->
+      <div class="main-content">
+        <!-- Header -->
+        <div class="about-me">
+          <h2 class="head2">Welcome to my cv on {{ ansible_os_family }}</h2>
+          <h1 class="head1">Поляков Василь</h1>
+          <p class="promt">DevOps</p>
+        </div>
+        <!-- Product -->
+        <div class="product">
+          <h3 class="head3">Товари</h3>
+        </div>
+        <!-- Work expiriens -->
+        <div class="container">
+          <h3 class="head3">Товари</h3>
+        </div>
+        <!--    Education -->
+        <div class="container">
+          <h3 class="head3">Education</h3>
+          <div>
+            <h4 class="comp-head4">
+              Педагогічний університет імені Володимира Винниченка
+            </h4>
+            <h5 class="head5">Політолог</h5>
+            <p class="date">September2020-June2024 | Ukraine</p>
+          </div>
+          <div>
+            <h4 class="comp-head4">GoIT</h4>
+            <h5 class="head5">Fullstack Online</h5>
+            <p class="date">May2023 | Ukraine</p>
+          </div>
+        </div>
+      </div>
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <img
+          class="my-photo"
+          src="./img/photo.jpg"
+          alt="My photo"
+          width="380"
+          height="500"
+        />
+        <div class="scontent">
+          <!-- Contacts -->
+          <div class="container hrefA">
+            <h3 class="head3">Contacts</h3>
+            <ul>
+              <li class="ahead">
+                Номер телефону:
+                <a class="link">+38 066 839 9905</a>
+              </li>
+              <li class="ahead">
+                Пошта:
+                <a class="link" href="mailto:vasilpol203@gmail.com"
+                  >vasilpol203@gmail.com</a
+                >
+              </li>
+              <li class="ahead">
+                GitHub:
+                <a
+                  class="link"
+                  href="https://github.com/MehaGami?tab=repositories"
+                  >MehaGami</a
+                >
+              </li>
+            </ul>
+          </div>
+          <!-- Tech Skills -->
+          <div class="container">
+            <h3 class="head3">Tech Skills</h3>
+            <ul class="list">
+              <li class="apromt">Git</li>
+              <li class="apromt">Linux</li>
+              <li class="apromt">Ansible</li>
+              <li class="apromt">Amazon AWS</li>
+              <li class="apromt">Docker/Compose</li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </body>
+</html>
+

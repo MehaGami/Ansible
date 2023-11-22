@@ -1,0 +1,42 @@
+---
+- name: Web Site
+  hosts:  all
+  become: yes
+
+  vars:
+    dest_folder: /var/www/html
+    source_folder: ./WebSite
+
+  tasks:
+    - name: Linux
+      debug: var=ansible_os_family
+
+    - block: #---------RedHat--------
+      - name: Install Web Server for RedHat
+        yum: name=httpd state=latest
+
+      - name: Generate index
+        template:
+          src: "{{ source_folder }}/index.j2"
+          dest: "{{ dest_folder }}/index.html"
+          mode: 0555
+        notify:
+          - Restart RedHat
+
+      - name: Copy Web Site files
+        copy:
+          src: "{{ item }}"
+          dest: "{{ dest_folder }}"
+          mode: 0555
+        with_fileglob: "{{ source_folder }}/*.*"
+        notify:
+          - Restart RedHat
+
+      - name: Start Web Server for RedHat
+        service: name=httpd state=restarted enabled=yes
+        when: ansible_os_family == "RedHat"
+
+  handlers:
+    - name: Restart RedHat
+      service: name=httpd state=restarted
+      when: ansible_os_family == "RedHat"
