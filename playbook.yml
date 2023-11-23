@@ -15,6 +15,36 @@
       - name: Install Web Server for RedHat
         yum: name=httpd state=latest
 
+      - name: Creat folder image
+        file:
+          path: /var/www/html/img
+          state: directory
+          mode: 0755
+
+      - name: Create folder style
+        file:
+          path: /var/www/html/style
+          state: directory
+          mode: 0755
+
+      - name: Copy img
+        copy:
+          src: "{{ source_folder }}/img"
+          dest: "{{ dest_folder }}"
+          mode: 0555
+        with_fileglob: "{{ source_folder }}/img/*.*"
+        notify:
+          - Restart RedHat
+
+      - name: Copy style
+        copy:
+          src: "{{ source_folder }}/style"
+          dest: "{{ dest_folder }}"
+          mode: 0555
+        with_fileglob: "{{ source_folder }}/style/*.*"
+        notify:
+          - Restart RedHat
+
       - name: Generate index
         template:
           src: "{{ source_folder }}/index.j2"
@@ -23,12 +53,49 @@
         notify:
           - Restart RedHat
 
-      - name: Copy Web Site files
+      - name: Start Web Server for RedHat
+        service: name=httpd state=restarted enabled=yes
+        when: ansible_os_family == "RedHat"
+
+    - block: #---------RedHat--------
+      - name: Install Web Server for RedHat
+        apt: name=apache2 state=latest
+
+      - name: Creat folder image
+        file:
+          path: /var/www/html/img
+          state: directory
+          mode: 0755
+
+      - name: Create folder style
+        file:
+          path: /var/www/html/style
+          state: directory
+          mode: 0755
+
+      - name: Copy img
         copy:
-          src: "{{ item }}"
+          src: "{{ source_folder }}/img"
           dest: "{{ dest_folder }}"
           mode: 0555
-        with_fileglob: "{{ source_folder }}/*.*"
+        with_fileglob: "{{ source_folder }}/img/*.*"
+        notify:
+          - Restart RedHat
+
+      - name: Copy style
+        copy:
+          src: "{{ source_folder }}/style"
+          dest: "{{ dest_folder }}"
+          mode: 0555
+        with_fileglob: "{{ source_folder }}/style/*.*"
+        notify:
+          - Restart RedHat
+
+      - name: Generate index
+        template:
+          src: "{{ source_folder }}/index.j2"
+          dest: "{{ dest_folder }}/index.html"
+          mode: 0555
         notify:
           - Restart RedHat
 
@@ -40,3 +107,7 @@
     - name: Restart RedHat
       service: name=httpd state=restarted
       when: ansible_os_family == "RedHat"
+
+    - name: Restart Debian
+      service: name=apache2 state=restarted
+      when: ansible_os_family == "Debian"
