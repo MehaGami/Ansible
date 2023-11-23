@@ -55,9 +55,9 @@
 
       - name: Start Web Server for RedHat
         service: name=httpd state=restarted enabled=yes
-        when: ansible_os_family == "RedHat"
+      when: ansible_os_family == "RedHat"
 
-    - block: #---------RedHat--------
+    - block: #---------Debian--------
       - name: Install Web Server for RedHat
         apt: name=apache2 state=latest
 
@@ -80,7 +80,7 @@
           mode: 0555
         with_fileglob: "{{ source_folder }}/img/*.*"
         notify:
-          - Restart RedHat
+          - Restart Debian
 
       - name: Copy style
         copy:
@@ -89,7 +89,7 @@
           mode: 0555
         with_fileglob: "{{ source_folder }}/style/*.*"
         notify:
-          - Restart RedHat
+          - Restart Debian
 
       - name: Generate index
         template:
@@ -97,11 +97,11 @@
           dest: "{{ dest_folder }}/index.html"
           mode: 0555
         notify:
-          - Restart RedHat
+          - Restart Debian
 
       - name: Start Web Server for RedHat
-        service: name=httpd state=restarted enabled=yes
-        when: ansible_os_family == "RedHat"
+        service: name=apache2 state=restarted enabled=yes
+      when: ansible_os_family == "Debian"
 
   handlers:
     - name: Restart RedHat
