@@ -1,5 +1,5 @@
 [amazon]
-linux1 ansible_host=35.181.53.177 
+linux1 ansible_host=13.39.19.117 
 
 [ubuntu]
 linux2 ansible_host=15.188.195.233
