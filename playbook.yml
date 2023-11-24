@@ -1,6 +1,6 @@
 ---
 - name: Web Site
-  hosts:  all
+  hosts: all
   become: yes
 
   vars:
@@ -15,93 +15,58 @@
       - name: Install Web Server for RedHat
         yum: name=httpd state=latest
 
-      - name: Creat folder image
-        file:
-          path: /var/www/html/img
-          state: directory
-          mode: 0755
-
-      - name: Create folder style
-        file:
-          path: /var/www/html/style
-          state: directory
-          mode: 0755
-
-      - name: Copy img
-        copy:
-          src: "{{ source_folder }}/img"
-          dest: "{{ dest_folder }}"
-          mode: 0555
-        with_fileglob: "{{ source_folder }}/img/*.*"
-        notify:
-          - Restart RedHat
-
-      - name: Copy style
-        copy:
-          src: "{{ source_folder }}/style"
-          dest: "{{ dest_folder }}"
-          mode: 0555
-        with_fileglob: "{{ source_folder }}/style/*.*"
-        notify:
-          - Restart RedHat
-
-      - name: Generate index
-        template:
-          src: "{{ source_folder }}/index.j2"
-          dest: "{{ dest_folder }}/index.html"
-          mode: 0555
-        notify:
-          - Restart RedHat
-
       - name: Start Web Server for RedHat
         service: name=httpd state=restarted enabled=yes
       when: ansible_os_family == "RedHat"
 
     - block: #---------Debian--------
-      - name: Install Web Server for RedHat
+      - name: Install Web Server for Debian
         apt: name=apache2 state=latest
 
-      - name: Creat folder image
-        file:
-          path: /var/www/html/img
-          state: directory
-          mode: 0755
-
-      - name: Create folder style
-        file:
-          path: /var/www/html/style
-          state: directory
-          mode: 0755
-
-      - name: Copy img
-        copy:
-          src: "{{ source_folder }}/img"
-          dest: "{{ dest_folder }}"
-          mode: 0555
-        with_fileglob: "{{ source_folder }}/img/*.*"
-        notify:
-          - Restart Debian
-
-      - name: Copy style
-        copy:
-          src: "{{ source_folder }}/style"
-          dest: "{{ dest_folder }}"
-          mode: 0555
-        with_fileglob: "{{ source_folder }}/style/*.*"
-        notify:
-          - Restart Debian
-
-      - name: Generate index
-        template:
-          src: "{{ source_folder }}/index.j2"
-          dest: "{{ dest_folder }}/index.html"
-          mode: 0555
-        notify:
-          - Restart Debian
-
-      - name: Start Web Server for RedHat
+      - name: Start Web Server for Debian
         service: name=apache2 state=restarted enabled=yes
       when: ansible_os_family == "Debian"
+      
+    - name: Create folder image
+      file:
+        path: "{{ dest_folder }}/img"
+        state: directory
+        mode: 0755
+
+    - name: Create folder style
+      file:
+        path: "{{ dest_folder }}/style"
+        state: directory
+        mode: 0755
+
+    - name: Copy img
+      copy:
+        src: "{{ source_folder }}/img"
+        dest: "{{ dest_folder }}"
+        mode: 0555
+      with_fileglob: "{{ source_folder }}/img/*.*"
+      notify:
+        - Restart Debian
+        - Restart RedHat
+
+    - name: Copy style
+      copy:
+        src: "{{ source_folder }}/style"
+        dest: "{{ dest_folder }}"
+        mode: 0555
+      with_fileglob: "{{ source_folder }}/style/*.*"
+      notify:
+        - Restart Debian
+        - Restart RedHat
+
+    - name: Generate index
+      template:
+        src: "{{ source_folder }}/index.j2"
+        dest: "{{ dest_folder }}/index.html"
+        mode: 0555
+      notify:
+        - Restart Debian
+        - Restart RedHat
 
   handlers:
     - name: Restart RedHat
