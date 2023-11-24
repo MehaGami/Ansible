@@ -2,4 +2,4 @@
 linux1 ansible_host=35.181.53.177 
 
 [ubuntu]
-linux2 ansible_host=15.236.186.253
+linux2 ansible_host=15.188.195.233

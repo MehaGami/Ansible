@@ -1,13 +1,5 @@
 ---
-- name: Web Site
-  hosts: all
-  become: yes
-
-  vars:
-    dest_folder: /var/www/html
-    source_folder: ./WebSite
-
-  tasks:
+# tasks file for deploy_web
     - name: Linux
       debug: var=ansible_os_family
 
@@ -41,38 +33,32 @@
 
     - name: Copy img
       copy:
-        src: "{{ source_folder }}/img"
+        src: "item"
         dest: "{{ dest_folder }}"
         mode: 0555
-      with_fileglob: "{{ source_folder }}/img/*.*"
+      loop:
+        - "photo.jpg"
       notify:
         - Restart Debian
         - Restart RedHat
 
     - name: Copy style
       copy:
-        src: "{{ source_folder }}/style"
+        src: "item"
         dest: "{{ dest_folder }}"
         mode: 0555
-      with_fileglob: "{{ source_folder }}/style/*.*"
+      loop:
+        - "styles.css"
+        - "reset.css"
       notify:
         - Restart Debian
         - Restart RedHat
 
     - name: Generate index
       template:
-        src: "{{ source_folder }}/index.j2"
+        src: "index.j2"
         dest: "{{ dest_folder }}/index.html"
         mode: 0555
       notify:
         - Restart Debian
         - Restart RedHat
-
-  handlers:
-    - name: Restart RedHat
-      service: name=httpd state=restarted
-      when: ansible_os_family == "RedHat"
-
-    - name: Restart Debian
-      service: name=apache2 state=restarted
-      when: ansible_os_family == "Debian"
